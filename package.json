@@ -1,0 +1,35 @@
+{
+  "name": "tci-sound",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "mocha",
+    "dist-bin": "pkg .",
+    "dist-docker": "docker build -t dkaukov/tci-sound . &&  docker push  dkaukov/tci-sound",
+    "start-docker": "docker run -it --rm --name tci-mqtt-gateway -e MQTT_URI=mqtt://localhost -e TCI_URI=ws://localhost:40001/ dkaukov/tci-mqtt-gateway"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.3.6",
+    "jsonpath-plus": "^5.1.0",
+    "mqtt": "^4.2.8",
+    "websocket": "^1.0.33",
+    "winston-simple-wrapper": "^0.3.1",
+    "ws-reconnect": "^1.0.7"
+  },
+  "devDependencies": {
+    "mocha": "^9.2.0",
+    "pkg": "^4.4.9"
+  },
+  "pkg": {
+    "assets": [
+      "config/*",
+      "protocol/*"
+    ],
+    "outputPath": "dist"
+  }
+}
