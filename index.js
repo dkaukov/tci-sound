@@ -1,9 +1,3 @@
-
-/**
- * Code adapted from:
- * https://web.archive.org/web/20110816002016/http://blogs.msdn.com/b/dawate/archive/2009/06/24/intro-to-audio-programming-part-3-synthesizing-simple-wave-audio-using-c.aspx
- */
-
  const peg = require("pegjs");
  const fs = require('fs');
  const { Factory} = require('winston-simple-wrapper')
@@ -16,6 +10,9 @@
  const Readable = require('stream').Readable
  const bufferAlloc = require('buffer-alloc')
  const Speaker  = require('speaker-arm64');
+
+const WebSocketServer = require("ws").Server;
+const wss = new WebSocketServer({ port: 8080 });
 
 var trxState = {
   ready: false
@@ -37,6 +34,14 @@ const wsClient = new WSCLINET(config.get("SDR").tci, {
       ready: false
   };
 }).on('message', handleIncomingWsMessage);
+
+wss.on('connection', function connection(ws) {
+  ws.on('message', function message(data) {
+    console.log('received: %s', data);
+  });
+
+  ws.send('something');
+});
 
 function handleIncomingWsMessage(message) {
   log.silly("Received: '" + message + "'", "RAW");
